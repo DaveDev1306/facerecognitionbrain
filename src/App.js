@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Navigation from './components/navigation/Navigation';
 import FaceRecognition from './components/facerecognition/FaceRecognition';
-import Clarifai from 'clarifai';
 import Logo from './components/logo/Logo';
 import Signin from './components/signin/Signin';
 import Register from './components/register/Register';
@@ -9,10 +8,6 @@ import ImageLinkForm from './components/imagelinkform/ImageLinkForm';
 import Rank from './components/rank/Rank';
 import Particles from 'react-particles-js';
 import './App.css';
-
-const app = new Clarifai.App({
-  apiKey: 'd172ef2158fa41bd9e0179180d16288d'
- });
 
 const particlesOptions = {
       particles: {
@@ -26,23 +21,25 @@ const particlesOptions = {
           }
        }
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -77,14 +74,18 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input})
-    app.models
-    .predict(
-      Clarifai.FACE_DETECT_MODEL,
-      this.state.input)
+    this.setState({imageUrl: this.state.input});
+      fetch('https://git.heroku.com/guarded-river-62949.git/imageurl', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            id: this.state.input
+        })
+      })
+      .then(response => response.json())
         .then(response => {
           if (response) {
-            fetch('http://localhost:3000/image', {
+            fetch('https://git.heroku.com/guarded-river-62949.git:3000/image', {
               method: 'put',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
@@ -95,6 +96,8 @@ class App extends Component {
             .then(count => {
               this.setState(Object.assign(this.state.user, { entries: count }))
             })
+            .catch(console.log)
+
           }
           this.displayFaceBox(this.calculateFaceLocation(response))
         })
@@ -103,7 +106,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
