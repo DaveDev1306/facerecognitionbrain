@@ -23,7 +23,7 @@ class Register extends React.Component {
     }
 
     onSubmitSignIn = () => {
-        fetch('https://git.heroku.com/guarded-river-62949.git/register', {
+        fetch('git@github.com:DaveDev1306/facerecognitionbrain-api.git/register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
