@@ -22,17 +22,17 @@ const particlesOptions = {
        }
 
 const initialState = {
-  input: '',
-  imageUrl: '',
+  input: "",
+  imageUrl: "",
   box: {},
-  route: 'signin',
+  route: "signin",
   isSignedIn: false,
   user: {
-    id: '',
-    name: '',
-    email: '',
+    id: "",
+    name: "",
+    email: "",
     entries: 0,
-    joined: ''
+    joined: ""
   }
 }
 
