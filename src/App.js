@@ -77,7 +77,8 @@ class App extends Component {
     this.setState({imageUrl: this.state.input});
       fetch('git@github.com:DaveDev1306/facerecognitionbrain-api.git/imageurl', {
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+                  'Accept': 'application/json'},
         body: JSON.stringify({
             id: this.state.input
         })
