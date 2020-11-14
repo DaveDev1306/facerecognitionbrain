@@ -88,7 +88,8 @@ class App extends Component {
           if (response) {
             fetch('git@github.com:DaveDev1306/facerecognitionbrain-api.git/image', {
               method: 'put',
-              headers: {'Content-Type': 'application/json'},
+              headers: {'Content-Type': 'application/json',
+                        'Accept': 'application/json'},
               body: JSON.stringify({
                   id: this.state.user.id
               })
